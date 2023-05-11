@@ -3,7 +3,9 @@ package com.beginsecure.domain;
 import java.util.*;
 
 public class WordListProcessor {
-    public List<String> processList(String input) {
+    UserInput in = new ConsoleInput();
+    public List<String> processList() {
+        String input = in.getInput();
         ArrayList<String> words = new ArrayList<>();
         List<String> wordsInLine = Arrays.asList(input.split("[, ?.@]+"));
         for (String word : wordsInLine) {

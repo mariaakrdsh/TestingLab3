@@ -7,19 +7,18 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
+//@MockitoSettings(strictness = Strictness.LENIENT)
+
 public class WordListProcessorTest {
 
     // Створення мок-об'єкту для класу UserInput
     @Mock
-    private UserInput userInputMock;
+    private UserInput in;
 
     // Створення об'єкту, який буде тестуватися
     @InjectMocks
@@ -36,14 +35,14 @@ public class WordListProcessorTest {
         expectedOutput.add("grapefruit");
 
         // Підставляємо певне значення для мок-об'єкту
-        Mockito.when(userInputMock.getInput()).thenReturn(input);
+        Mockito.when(in.getInput()).thenReturn(input);
 
-        List<String> actualOutput = wordListProcessor.processList(userInputMock.getInput());
+        List<String> actualOutput = wordListProcessor.processList();
 
         // Перевірка очікуваного результату з отриманим
         Assertions.assertEquals(expectedOutput, actualOutput);
         // Перевірка того, що метод getInput був викликаний рівно один раз
-        Mockito.verify(userInputMock, Mockito.times(1)).getInput();
+        Mockito.verify(in, Mockito.times(1)).getInput();
     }
 
     // Тест для перевірки обробки довгих слів
@@ -55,12 +54,12 @@ public class WordListProcessorTest {
         expectedOutput.add("pneumonoultramicroscopicsilico");
         expectedOutput.add("hippopotomonstrosesquippedalio");
 
-        Mockito.when(userInputMock.getInput()).thenReturn(input);
+        Mockito.when(in.getInput()).thenReturn(input);
 
-        List<String> actualOutput = wordListProcessor.processList(userInputMock.getInput());
+        List<String> actualOutput = wordListProcessor.processList();
 
         Assertions.assertEquals(expectedOutput, actualOutput);
-        Mockito.verify(userInputMock, Mockito.times(1)).getInput();
+        Mockito.verify(in, Mockito.times(1)).getInput();
     }
 
     // Тест для перевірки обробки порожнього вводу
@@ -69,12 +68,12 @@ public class WordListProcessorTest {
         String input = "";
         List<String> expectedOutput = new ArrayList<>();
 
-        Mockito.when(userInputMock.getInput()).thenReturn(input);
+        Mockito.when(in.getInput()).thenReturn(input);
 
-        List<String> actualOutput = wordListProcessor.processList(userInputMock.getInput());
+        List<String> actualOutput = wordListProcessor.processList();
 
         Assertions.assertEquals(expectedOutput, actualOutput);
-        Mockito.verify(userInputMock, Mockito.times(1)).getInput();
+        Mockito.verify(in, Mockito.times(1)).getInput();
     }
 
 
@@ -84,15 +83,15 @@ public class WordListProcessorTest {
         String input = "apple, banana, orange, grapefruit";
 
         // Підстановка винятку, який буде генеруватися при виклику методу getInput
-        Mockito.when(userInputMock.getInput()).thenThrow(new RuntimeException("Exception during input"));
+        Mockito.when(in.getInput()).thenThrow(new RuntimeException("Exception during input"));
 
         // Перевірка того, що метод processList викликає виняток RuntimeException
         Assertions.assertThrows(RuntimeException.class, () -> {
-            wordListProcessor.processList(userInputMock.getInput());
+            wordListProcessor.processList();
         });
 
         // Перевірка того, що метод getInput був викликаний рівно один раз
-        Mockito.verify(userInputMock, Mockito.times(1)).getInput();
+        Mockito.verify(in, Mockito.times(1)).getInput();
     }
 
 
@@ -106,16 +105,16 @@ public class WordListProcessorTest {
         expectedOutput.add("giraffe");
         expectedOutput.add("elephant");
 
-        Mockito.when(userInputMock.getInput()).thenReturn(input);
+        Mockito.when(in.getInput()).thenReturn(input);
 
-        List<String> actualOutput = wordListProcessor.processList(userInputMock.getInput());
+        List<String> actualOutput = wordListProcessor.processList();
 
         Assertions.assertEquals(expectedOutput, actualOutput);
-        Mockito.verify(userInputMock, Mockito.times(1)).getInput();
+        Mockito.verify(in, Mockito.times(1)).getInput();
     }
 
 
-    // Тест для перевірки часткового моку об'єкта
+//     Тест для перевірки часткового моку об'єкта
     @Test
     public void testProcessList_PartialMock() {
         String input = "apple, banana, orange, grapefruit";
@@ -129,14 +128,14 @@ public class WordListProcessorTest {
         WordListProcessor spyWordListProcessor = Mockito.spy(new WordListProcessor());
 
         // Підстановка реального методу для методу processList
-        Mockito.when(spyWordListProcessor.processList(Mockito.anyString())).thenCallRealMethod();
-        Mockito.when(userInputMock.getInput()).thenReturn(input);
+//        Mockito.when(spyWordListProcessor.processList()).thenCallRealMethod();
+        Mockito.when(in.getInput()).thenReturn(input);
 
-        List<String> actualOutput = spyWordListProcessor.processList(userInputMock.getInput());
+        List<String> actualOutput = spyWordListProcessor.processList();
 
         Assertions.assertEquals(expectedOutput, actualOutput);
-        Mockito.verify(userInputMock, Mockito.times(1)).getInput();
+        Mockito.verify(in, Mockito.times(1)).getInput();
         // Перевірка того, що метод processList був викликаний рівно один раз
-        Mockito.verify(spyWordListProcessor, Mockito.times(1)).processList(Mockito.anyString());
+        Mockito.verify(spyWordListProcessor, Mockito.times(1)).processList();
     }
 }
